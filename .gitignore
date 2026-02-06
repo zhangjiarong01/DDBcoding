@@ -18,3 +18,5 @@ lancedb_data/
 
 # 临时文件
 *.log
+
+storage_data/
