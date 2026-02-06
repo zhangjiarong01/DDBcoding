@@ -87,8 +87,13 @@ def search(query_text):
 
 if __name__ == "__main__":
     import time
+    import sys
     
-    query = "mavg" 
+    # 支持命令行参数
+    if len(sys.argv) > 1:
+        query = " ".join(sys.argv[1:])
+    else:
+        query = "mavg" 
     
     start = time.time()
     try:

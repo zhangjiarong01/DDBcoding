@@ -35,9 +35,25 @@ Settings.chunk_size = 512
 # --- 核心修改部分结束 ---
 
 # 准备存储路径
-PERSIST_DIR = os.getenv("PERSIST_DIR", "./storage_data")  # 存放 docstore.json 等
-DB_URI = os.getenv("DB_URI", "./lancedb_data")       # 存放向量数据
-DOCS_DIR = os.getenv("DOCS_DIR", "./my_markdown_files")
+# 优先加载当前目录 .env
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# current_dir is inside scripts/rag/
+project_root = os.path.dirname(os.path.dirname(current_dir)) 
+# project_root is DDBcoding/
+
+# Load local .env
+load_dotenv(os.path.join(current_dir, ".env"))
+
+# Get paths from env or use defaults relative to project root
+# .env might contain relative paths provided by user, usually relative to project root (CWD)
+env_persist = os.getenv("PERSIST_DIR", "./storage_data")
+env_db_uri = os.getenv("DB_URI", "./lancedb_data")
+env_docs = os.getenv("DOCS_DIR", "./references")
+
+# Convert to absolute paths based on project_root for safety
+PERSIST_DIR = os.path.abspath(os.path.join(project_root, env_persist))
+DB_URI = os.path.abspath(os.path.join(project_root, env_db_uri))
+DOCS_DIR = os.path.abspath(os.path.join(project_root, env_docs))
 MODEL_NAME = "BAAI/bge-m3"
 
 def ingest_documents():
